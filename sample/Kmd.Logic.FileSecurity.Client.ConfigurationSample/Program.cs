@@ -1,8 +1,13 @@
-﻿using Kmd.Logic.Identity.Authorization;
+﻿using Kmd.Logic.FileSecurity.Client.ServiceMessages;
+using Kmd.Logic.Identity.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using System;
+using System.IO;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Kmd.Logic.FileSecurity.Client.ConfigurationSample
@@ -54,26 +59,55 @@ namespace Kmd.Logic.FileSecurity.Client.ConfigurationSample
             var validator = new ConfigurationValidator(configuration);
             if (!validator.Validate())
             {
-                return;
             }
 
-            using (var httpClient = new HttpClient())
-            using (var tokenProviderFactory = new LogicTokenProviderFactory(configuration.TokenProvider))
+            using var httpClient = new HttpClient();
+            using var tokenProviderFactory = new LogicTokenProviderFactory(configuration.TokenProvider);
+            var fileSecurityClient = new FileSecurityClient(httpClient, tokenProviderFactory, configuration.FileSecurityOptions);
+
+            var path = GetCertificateStream("kmd-df-key.p12");
+
+
+            var memoryStream = new MemoryStream();
+
+            path.Position = 0;
+            path.CopyTo(memoryStream);
+
+            var ms = new MemoryStream();
+            path.CopyTo(ms);
+
+            IFormFile file = new FormFile(ms, 0, ms.Length, "name", "kmd-df-key.p12");
+
+            var value = new CreateCertificateRequestDetails("Test", ms, "Qwer123!");
+
+            var cereate = await fileSecurityClient.CreateCertificate(value).ConfigureAwait(false);
+
+
+        }
+        private static FileStream GetCertificateStream(string certificateFileName)
+        {
+            return File.OpenRead(Path.Combine(Directory.GetCurrentDirectory(), "Certificates", certificateFileName));
+        }
+
+
+        public static IFormFile ReturnFormFile(FileStream result)
+        {
+            var ms = new MemoryStream();
+            try
             {
-                var fileSecurityClient = new FileSecurityClient(httpClient, tokenProviderFactory, configuration.FileSecurityOptions);
-                var certificateId = configuration.CertificateDetails.CertificateId;
-
-                Log.Information("Fetching certificate details for certificate id {CertificateId} ", configuration.CertificateDetails.CertificateId);
-                var result = await fileSecurityClient.GetCertificate(certificateId).ConfigureAwait(false);
-
-                if (result == null)
-                {
-                    Log.Error("Invalid certificate id {Id}", configuration.CertificateDetails.CertificateId);
-                    return;
-                }
-
-                Console.WriteLine("Certificate ID: {0} \nCertificate Name: {1}\nSubscription ID : {2}", result.CertificateId, result.Name, result.SubscriptionId);
+                result.CopyTo(ms);
+                return new FormFile(ms, 0, ms.Length, "name", result.Name);
+            }
+            catch (Exception e)
+            {
+                ms.Dispose();
+                throw;
+            }
+            finally
+            {
+                ms.Dispose();
             }
         }
     }
 }
+
