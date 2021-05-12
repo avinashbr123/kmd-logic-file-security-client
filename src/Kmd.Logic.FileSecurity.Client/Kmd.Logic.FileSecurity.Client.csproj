@@ -4,6 +4,10 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <NoWarn>;CS1591;SA1633;SA1200;SA1201</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Azure.Core" Version="1.13.0" />
     <PackageReference Include="Kmd.Logic.Identity.Authorization" Version="2.1.0" />

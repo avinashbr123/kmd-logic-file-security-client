@@ -31,9 +31,9 @@ namespace Kmd.Logic.FileSecurity.Client
             /// </param>
             /// <param name='certificatePassword'>
             /// </param>
-            public static CreateCertificateResponse SaveCertificates(this IInternalClient operations, System.Guid subscriptionId, string name, Stream certificate, string certificatePassword = default(string))
+            public static CertificateResponse CreateCertificates(this IInternalClient operations, System.Guid subscriptionId, string name, Stream certificate, string certificatePassword = default(string))
             {
-                return operations.SaveCertificatesAsync(subscriptionId, name, certificate, certificatePassword).GetAwaiter().GetResult();
+                return operations.CreateCertificatesAsync(subscriptionId, name, certificate, certificatePassword).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -54,9 +54,9 @@ namespace Kmd.Logic.FileSecurity.Client
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<CreateCertificateResponse> SaveCertificatesAsync(this IInternalClient operations, System.Guid subscriptionId, string name, Stream certificate, string certificatePassword = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<CertificateResponse> CreateCertificatesAsync(this IInternalClient operations, System.Guid subscriptionId, string name, Stream certificate, string certificatePassword = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.SaveCertificatesWithHttpMessagesAsync(subscriptionId, name, certificate, certificatePassword, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.CreateCertificatesWithHttpMessagesAsync(subscriptionId, name, certificate, certificatePassword, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -97,6 +97,58 @@ namespace Kmd.Logic.FileSecurity.Client
             public static async Task<CertificateResponse> GetCertificatesAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid certificateId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetCertificatesWithHttpMessagesAsync(subscriptionId, certificateId, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Update certificate and details
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='subscriptionId'>
+            /// The subscription that owns the certificate
+            /// </param>
+            /// <param name='certificateId'>
+            /// Identifier of the certificate to update.
+            /// </param>
+            /// <param name='name'>
+            /// </param>
+            /// <param name='certificate'>
+            /// </param>
+            /// <param name='certificatePassword'>
+            /// </param>
+            public static CertificateResponse UpdateCertificates(this IInternalClient operations, System.Guid subscriptionId, System.Guid certificateId, string name, Stream certificate, string certificatePassword = default(string))
+            {
+                return operations.UpdateCertificatesAsync(subscriptionId, certificateId, name, certificate, certificatePassword).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Update certificate and details
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='subscriptionId'>
+            /// The subscription that owns the certificate
+            /// </param>
+            /// <param name='certificateId'>
+            /// Identifier of the certificate to update.
+            /// </param>
+            /// <param name='name'>
+            /// </param>
+            /// <param name='certificate'>
+            /// </param>
+            /// <param name='certificatePassword'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<CertificateResponse> UpdateCertificatesAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid certificateId, string name, Stream certificate, string certificatePassword = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.UpdateCertificatesWithHttpMessagesAsync(subscriptionId, certificateId, name, certificate, certificatePassword, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }

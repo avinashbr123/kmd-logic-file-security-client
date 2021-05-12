@@ -33,9 +33,22 @@ jobs:
     - name: Install dependencies
       run: dotnet restore '${{ env.PROJPATH }}/Kmd.Logic.FileSecurity.Client.csproj'
 
-    - name: Build
-      run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.FileSecurity.Client.csproj' --configuration Release --no-restore
+    - name: Build - PreRelease
+      run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.FileSecurity.Client.csproj' --configuration Debug --no-restore -p:VersionSuffix=dev-${{ steps.current-time.outputs.formattedTime }}
+      if: GITHUB.REF != 'refs/heads/master'
 
-    - name: Pack
+    - name: Build - Release
+      run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.FileSecurity.Client.csproj' --configuration Release --no-restore
+      if: GITHUB.REF == 'refs/heads/master'
+
+    - name: Pack - PreRelease
+      run: dotnet pack '${{ env.PROJPATH }}/Kmd.Logic.FileSecurity.Client.csproj' --output ${{ env.PROJPATH }}/nupkgs --no-restore -p:VersionSuffix=dev-${{ steps.current-time.outputs.formattedTime }}
+      if: GITHUB.REF != 'refs/heads/master'
+
+    - name: Pack - Release
       run: dotnet pack '${{ env.PROJPATH }}/Kmd.Logic.FileSecurity.Client.csproj' --output ${{ env.PROJPATH }}/nupkgs --no-restore
-      if: GITHUB.REF == 'refs/heads/master' || 'refs/heads/dev'
+      if: GITHUB.REF == 'refs/heads/master'
+
+    - name: Publish NuGet
+      run: dotnet nuget push ${{ env.PROJPATH }}/nupkgs/Kmd.Logic.FileSecurity.Client*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      if: GITHUB.REF == 'refs/heads/dev' || GITHUB.REF == 'refs/heads/master'

@@ -343,7 +343,7 @@ namespace Kmd.Logic.FileSecurity.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<CreateCertificateResponse>> SaveCertificatesWithHttpMessagesAsync(System.Guid subscriptionId, string name, Stream certificate, string certificatePassword = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<CertificateResponse>> CreateCertificatesWithHttpMessagesAsync(System.Guid subscriptionId, string name, Stream certificate, string certificatePassword = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (name == null)
             {
@@ -365,7 +365,7 @@ namespace Kmd.Logic.FileSecurity.Client
                 tracingParameters.Add("certificate", certificate);
                 tracingParameters.Add("certificatePassword", certificatePassword);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "SaveCertificates", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "CreateCertificates", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
@@ -470,7 +470,7 @@ namespace Kmd.Logic.FileSecurity.Client
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<CreateCertificateResponse>();
+            var _result = new HttpOperationResponse<CertificateResponse>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -479,7 +479,7 @@ namespace Kmd.Logic.FileSecurity.Client
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<CreateCertificateResponse>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<CertificateResponse>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -563,6 +563,199 @@ namespace Kmd.Logic.FileSecurity.Client
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200 && (int)_statusCode != 400 && (int)_statusCode != 401)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<CertificateResponse>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<CertificateResponse>(_responseContent, DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Update certificate and details
+        /// </summary>
+        /// <param name='subscriptionId'>
+        /// The subscription that owns the certificate
+        /// </param>
+        /// <param name='certificateId'>
+        /// Identifier of the certificate to update.
+        /// </param>
+        /// <param name='name'>
+        /// </param>
+        /// <param name='certificate'>
+        /// </param>
+        /// <param name='certificatePassword'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<CertificateResponse>> UpdateCertificatesWithHttpMessagesAsync(System.Guid subscriptionId, System.Guid certificateId, string name, Stream certificate, string certificatePassword = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (name == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "name");
+            }
+            if (certificate == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "certificate");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("subscriptionId", subscriptionId);
+                tracingParameters.Add("certificateId", certificateId);
+                tracingParameters.Add("name", name);
+                tracingParameters.Add("certificate", certificate);
+                tracingParameters.Add("certificatePassword", certificatePassword);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "UpdateCertificates", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "subscriptions/{subscriptionId}/certificates/{certificateId}").ToString();
+            _url = _url.Replace("{subscriptionId}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(subscriptionId, SerializationSettings).Trim('"')));
+            _url = _url.Replace("{certificateId}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(certificateId, SerializationSettings).Trim('"')));
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("PUT");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            MultipartFormDataContent _multiPartContent = new MultipartFormDataContent();
+            if (name != null)
+            {
+                StringContent _name = new StringContent(name, System.Text.Encoding.UTF8);
+                _multiPartContent.Add(_name, "name");
+            }
+            if (certificate != null)
+            {
+                StreamContent _certificate = new StreamContent(certificate);
+                _certificate.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                ContentDispositionHeaderValue _contentDispositionHeaderValue = new ContentDispositionHeaderValue("form-data");
+                _contentDispositionHeaderValue.Name = "certificate";
+                // get filename from stream if it's a file otherwise, just use  'unknown'
+                var _fileStream = certificate as FileStream;
+                var _fileName = (_fileStream != null ? _fileStream.Name : null) ?? "unknown";
+                if(System.Linq.Enumerable.Any(_fileName, c => c > 127) )
+                {
+                    // non ASCII chars detected, need UTF encoding:
+                    _contentDispositionHeaderValue.FileNameStar = _fileName;
+                }
+                else
+                {
+                    // ASCII only
+                    _contentDispositionHeaderValue.FileName = _fileName;
+                }
+                _certificate.Headers.ContentDisposition = _contentDispositionHeaderValue;
+                _multiPartContent.Add(_certificate, "certificate");
+            }
+            if (certificatePassword != null)
+            {
+                StringContent _certificatePassword = new StringContent(certificatePassword, System.Text.Encoding.UTF8);
+                _multiPartContent.Add(_certificatePassword, "certificatePassword");
+            }
+            _httpRequest.Content = _multiPartContent;
             // Set Credentials
             if (Credentials != null)
             {

@@ -59,7 +59,7 @@ namespace Kmd.Logic.FileSecurity.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<CreateCertificateResponse>> SaveCertificatesWithHttpMessagesAsync(System.Guid subscriptionId, string name, Stream certificate, string certificatePassword = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<CertificateResponse>> CreateCertificatesWithHttpMessagesAsync(System.Guid subscriptionId, string name, Stream certificate, string certificatePassword = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Get details of the requested certificate managed by a subscrition.
@@ -77,6 +77,29 @@ namespace Kmd.Logic.FileSecurity.Client
         /// The cancellation token.
         /// </param>
         Task<HttpOperationResponse<CertificateResponse>> GetCertificatesWithHttpMessagesAsync(System.Guid subscriptionId, System.Guid certificateId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Update certificate and details
+        /// </summary>
+        /// <param name='subscriptionId'>
+        /// The subscription that owns the certificate
+        /// </param>
+        /// <param name='certificateId'>
+        /// Identifier of the certificate to update.
+        /// </param>
+        /// <param name='name'>
+        /// </param>
+        /// <param name='certificate'>
+        /// </param>
+        /// <param name='certificatePassword'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse<CertificateResponse>> UpdateCertificatesWithHttpMessagesAsync(System.Guid subscriptionId, System.Guid certificateId, string name, Stream certificate, string certificatePassword = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Delete requested certificate managed by a subscrition.

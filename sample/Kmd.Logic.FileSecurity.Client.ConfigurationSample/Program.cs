@@ -54,6 +54,7 @@ namespace Kmd.Logic.FileSecurity.Client.ConfigurationSample
                 .WriteTo.Console()
                 .CreateLogger();
         }
+
         private static async Task Run(AppConfiguration configuration)
         {
             var validator = new ConfigurationValidator(configuration);

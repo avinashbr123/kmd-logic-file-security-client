@@ -9,7 +9,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kmd.Logic.FileSecurity.Clie
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{28575536-50B9-4ED1-B5D8-A3F25FDAD261}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kmd.Logic.FileSecurity.Client.ConfigurationSample", "sample\Kmd.Logic.FileSecurity.Client.ConfigurationSample\Kmd.Logic.FileSecurity.Client.ConfigurationSample.csproj", "{A7C02461-2A43-45C9-8C7F-32A681C489E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kmd.Logic.FileSecurity.Client.ConfigurationSample", "sample\Kmd.Logic.FileSecurity.Client.ConfigurationSample\Kmd.Logic.FileSecurity.Client.ConfigurationSample.csproj", "{A7C02461-2A43-45C9-8C7F-32A681C489E2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{EC79C769-EE66-49C4-84B8-DE401FDA50AB}"
+	ProjectSection(SolutionItems) = preProject
+		CHANGES.md = CHANGES.md
+		Directory.Build.props = Directory.Build.props
+		.github\workflows\github-cicd.yml = .github\workflows\github-cicd.yml
+		global.json = global.json
+		kmd-logic-icon.png = kmd-logic-icon.png
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
